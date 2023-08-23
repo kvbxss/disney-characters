@@ -1,8 +1,24 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getDisneyCharacters } from '../services/Api';
-
+import { ICharacter } from '../services/interface';
+import { FaRegStar, FaStar } from 'react-icons/fa';
 const Hero: FunctionComponent = () => {
+
+    const [data , setData] = useState<ICharacter[]>([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+        const result = await getDisneyCharacters();
+        setData(result);
+        };
+        fetchData();
+    }, []);
+
+
+    const charactersWithMostFilms = data.slice().sort((a, b) => b.films.length - a.films.length).slice(0, 3);
+
+
   return (
     <HeroContainer>
         <TextWrapper>
@@ -11,42 +27,24 @@ const Hero: FunctionComponent = () => {
             </Text>
         </TextWrapper>
         <CardWrapper>
-            <Card>
-                <CardImage />
+        {charactersWithMostFilms.map((character, index) => (
+            <Card key={index}>
+                <CardImage src={character.imageUrl} alt={character.name} />
                 <CardText>
                     <CardTitle>
-
+                        {character.name}
+                        &nbsp;
+                        <Star /> : <EmptyStar />
                     </CardTitle>
-                    <Star></Star>
+                    
                     <CardSubtitle>
-
+                        Films: {character.films.length}
+                        <br/>
+                        Tv-Shows: {character.tvShows.length}
                     </CardSubtitle>
                 </CardText>
             </Card>
-            <Card>
-                <CardImage />
-                <CardText>
-                    <CardTitle>
-
-                    </CardTitle>
-                    <Star></Star>
-                    <CardSubtitle>
-
-                    </CardSubtitle>
-                </CardText>
-            </Card>
-            <Card>
-                <CardImage />
-                <CardText>
-                    <CardTitle>
-
-                    </CardTitle>
-                    <Star></Star>
-                    <CardSubtitle>
-
-                    </CardSubtitle>
-                </CardText>
-            </Card>
+        ))}
         </CardWrapper>
     </HeroContainer>
   )
@@ -60,7 +58,7 @@ const HeroContainer = styled.section`
     align-items: center;
     flex-direction: column;
     height: 100vh;
-    width: 100vw;
+    width: 100;
     background-color: #f2f2f2;
     `
 
@@ -87,42 +85,53 @@ const Card = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 400px;
-    width: 300px;
+    height: 500px;
+    width: 350px;
     background-color: #011936;
     border-radius: 10px;
     margin: 20px;
+
+    &:hover {
+        background-color: #273f5c;
+        scale: 1.1;
+        transition: 0.5s ease-out;
+    }
     `
-const CardImage = styled.div`
+const CardImage = styled.img`
     height: 250px;
     width: 300px;
-    background-color: #273f5c;
     border-radius: 10px 10px 0px 0px;
     `
 const CardText = styled.div`
     display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 100%;
+    align-items: flex-start;
     flex-direction: column;
+    margin-left: 100px;
     `
+
 const CardTitle = styled.h2`
     font-size: 30px;
     font-family: "Mukta", sans-serif;
-    color: #ed254e;
+    color: #f2f2f2;
     font-weight: 500;
     text-decoration: none;
     `
 const CardSubtitle = styled.h3`
     font-size: 20px;
     font-family: "Mukta", sans-serif;
-    color: #ed254e;
+    color: #f2f2f2;
     font-weight: 500;
     text-decoration: none;
     `
-const Star = styled.div`
+const Star = styled(FaStar)`
     height: 20px;
     width: 20px;
-    background-color: #ed254e;
+    border-radius: 50%;
+    `
+const EmptyStar = styled(FaRegStar)`
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
     `
 

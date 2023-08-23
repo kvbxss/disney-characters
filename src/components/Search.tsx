@@ -1,17 +1,15 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-
-
-const Search: FunctionComponent = () => {
-
-
-
+const Search: FunctionComponent = () => { 
     return (
         <SearchContainer>
-        <Image></Image>
+        
+        <ImageWrapper>
+        <Image src='https://images.unsplash.com/photo-1556950961-8c092986258e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80' alt="Disneyland"></Image>
+        </ImageWrapper>
         <SearchText>
-           <Text>List of {} Disney Characters with own Tv Shows</Text>
+           <Text>List of 100 Disney Characters with own Tv Shows</Text>
            <Title>The Best Animated Disney Characters <br/> of All Time</Title>
             <SearchBar placeholder="Search for a character..."></SearchBar>
         </SearchText>
@@ -31,10 +29,18 @@ const SearchContainer = styled.div`
     background-color: #011936;;
 `
 
+const ImageWrapper = styled.div`
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    margin: 40px;
+`
+
 const Image = styled.img`
-    width: 1/3;
-    height: fit-content;
-    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
 `    
 
 const SearchText = styled.div`

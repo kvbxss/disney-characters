@@ -9,8 +9,19 @@ import {
 import Search from './Search';
 import { ICharacter } from '../services/interface';
 import { getDisneyCharacters } from '../services/Api';
+import { FaRegStar, FaStar } from 'react-icons/fa';
 
-const columnHelper = createColumnHelper<ICharacter>();
+
+
+
+const List: FunctionComponent = () => {
+    const [data , setData] = useState<ICharacter[]>([])
+    const [favorite, setFavorite] = useState([] as Array<number>)  
+    const [displayCount, setDisplayCount] = useState(10)
+    const [loadIncrement, setLoadIncrement] = useState(10)
+    const getArray = JSON.parse(localStorage.getItem('favorite') || '0')
+
+    const columnHelper = createColumnHelper<ICharacter>();
 
 const columns = [
     columnHelper.accessor("imageUrl", {
@@ -25,13 +36,33 @@ const columns = [
         cell: tableProps => <p>{tableProps.row.original.films.length}</p>,
     }),
     columnHelper.display( {
+        id: "Favorites", 
         header: "Favorites",
+        cell: tableProps => {
+            const characterId = tableProps.row.original._id;
+            const isFavorite = favorite.includes(characterId);
+
+            const ToggleFavorite = () => {
+                if (isFavorite) {
+                    setFavorite(favorite.filter(id => id !== characterId));
+                } else {
+                    setFavorite([...favorite, characterId]);
+                }
+            }
+            return (
+                <>
+                    {isFavorite ? <Star onClick={ToggleFavorite} /> : <EmptyStar onClick={ToggleFavorite} />}
+                </>
+            )
+        }, 
     }),
 ]
 
-
-const List: FunctionComponent = () => {
-    const [data , setData] = useState<ICharacter[]>([])
+    useEffect(() => {
+        if (getArray !== 0) {
+            setFavorite([...getArray]) 
+        }
+    }, [])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,6 +73,33 @@ const List: FunctionComponent = () => {
     }, []);
 
 
+    const handleScroll = useCallback(() => {
+        const tableContainer = document.getElementById('table-container'); // Replace with the actual ID of your table container
+        if (!tableContainer) return;
+    
+        if (
+            tableContainer.scrollTop + tableContainer.clientHeight >=
+            tableContainer.scrollHeight - 100
+        ) {
+           
+            setDisplayCount(displayCount + loadIncrement);
+        }
+    }, [displayCount, loadIncrement]);
+    
+    useEffect(() => {
+        
+        const tableContainer = document.getElementById('table-container'); // Replace with the actual ID of your table container
+        if (tableContainer) {
+            tableContainer.addEventListener('scroll', handleScroll);
+        }
+    
+        return () => {
+            
+            if (tableContainer) {
+                tableContainer.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, [handleScroll]);
 
     const table = useReactTable({
         data: data,
@@ -49,12 +107,33 @@ const List: FunctionComponent = () => {
         getCoreRowModel: getCoreRowModel(),
     });
 
+    const renderFavoriteCharacters = () => {
+        return (
+            <div>
+                <Title>My Favorites</Title>
+                <Table>
+                    <Row>
+                        <TableHead>Name</TableHead>
+                    </Row>
+                    {favorite.map((characterId) => {
+                        const character = data.find((char) => char._id === characterId);
+                        return (
+                            <Row key={characterId}>
+                                <TableData>{character?.name}</TableData>
+                            </Row>
+                        );
+                    })}
+                </Table>
+            </div>
+        );
+    };
+
     
     return (
       <ListContainer>
         <Search />
-        <TablesContainer>
-            <Characters>
+        <TablesContainer >
+            <Characters id='tableContainer'>
                 <Title>Disney Characters</Title>
                 <Table>         
                     <Row> 
@@ -93,12 +172,7 @@ const List: FunctionComponent = () => {
                 </Table>
             </Characters>
             <Favorites>
-                <Title>My Favorites</Title>
-                <Table>
-                <Row>
-                <TableHead>Name</TableHead>
-                </Row>
-                </Table>
+                {renderFavoriteCharacters()}
             </Favorites>
         </TablesContainer>
       </ListContainer>
@@ -127,7 +201,7 @@ const TablesContainer = styled.div`
 
 const Characters = styled.div`
     background-color: #273f5c;
-    height: fit-content;
+    height: 1000px;
     width: 50%;
     margin: 10px;
     display: flex;
@@ -136,6 +210,26 @@ const Characters = styled.div`
     flex-direction: column;
     word-wrap: normal;
     border-radius: 10px;
+    overflow: scroll;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+        border-radius: 5px;
+        transition: all 0.3s ease-in-out;
+      }
+    
+      &::-webkit-scrollbar-track {
+        display: none;
+      }
+    
+      &::-webkit-scrollbar-thumb {
+        background-color: #ed254e;
+        border-radius: 5px;
+        &:hover {
+          background-color: #e3627c;
+        }
+      }
 `
 
 const Favorites = styled.div`
@@ -168,6 +262,7 @@ const Table = styled.table`
 
 const Row = styled.tr`
     display: table-row;
+
     `
 const TableHead = styled.th`
     padding: 12px;
@@ -186,4 +281,22 @@ const Image = styled.img`
     height: 100px;
     border-radius: 50%;
     margin: 0 auto;
+    `
+const StarIcon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    `
+
+const Star = styled(FaStar)`
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    `
+
+    const EmptyStar = styled(FaRegStar)`
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
     `
