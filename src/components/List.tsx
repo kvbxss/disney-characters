@@ -78,6 +78,7 @@ const columns = [
     }),
 ]
 
+
     useEffect(() => {
         if (getArray !== 0) {
             setFavorite([...getArray]) 
@@ -98,33 +99,6 @@ const columns = [
       }, [searchTerm, filterData]);
 
 
-    const handleScroll = useCallback(() => {
-        const tableContainer = document.getElementById('table-container'); // Replace with the actual ID of your table container
-        if (!tableContainer) return;
-    
-        if (
-            tableContainer.scrollTop + tableContainer.clientHeight >=
-            tableContainer.scrollHeight - 100
-        ) {
-           
-            setDisplayCount(displayCount + loadIncrement);
-        }
-    }, [displayCount, loadIncrement]);
-    
-    useEffect(() => {
-        
-        const tableContainer = document.getElementById('table-container'); // Replace with the actual ID of your table container
-        if (tableContainer) {
-            tableContainer.addEventListener('scroll', handleScroll);
-        }
-    
-        return () => {
-            
-            if (tableContainer) {
-                tableContainer.removeEventListener('scroll', handleScroll);
-            }
-        };
-    }, [handleScroll]);
 
 
     const table = useReactTable({
@@ -139,13 +113,24 @@ const columns = [
                 <Title>My Favorites</Title>
                 <Table>
                     <Row>
+                        <TableHead>Picture</TableHead>
                         <TableHead>Name</TableHead>
+                        <TableHead>Films count</TableHead>
+                        <TableHead>Favorites</TableHead>
                     </Row>
                     {favorite.map((characterId) => {
                         const character = data.find((char) => char._id === characterId);
                         return (
                             <Row key={characterId}>
+                                <TableData><Image src={character?.imageUrl} alt='photo'></Image></TableData>
                                 <TableData>{character?.name}</TableData>
+                                <TableData>{character?.films.length}</TableData>
+                                <TableData>
+                                    <StarIcon>
+                                        <Star />
+                                    </StarIcon>
+                                </TableData>
+
                             </Row>
                         );
                     })}
@@ -159,7 +144,7 @@ const columns = [
       <ListContainer>
         <Search handleSearch={filterData}/>
         <TablesContainer >
-            <Characters id='tableContainer'>
+            <Characters>
                 <Title>Disney Characters</Title>
                 <Table>         
                     <Row> 
