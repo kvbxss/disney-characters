@@ -60,6 +60,10 @@ const HeroContainer = styled.section`
     height: 100vh;
     width: 100;
     background-color: #f2f2f2;
+
+    @media (max-width: 1024px) {
+        height: 100%;
+    }
     `
 
 const TextWrapper = styled.div`
@@ -79,6 +83,10 @@ const CardWrapper = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: row;
+
+    @media (max-width: 1024px) {
+        flex-direction: column;
+    }
     `
 const Card = styled.div`
     display: flex;

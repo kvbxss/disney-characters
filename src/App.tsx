@@ -1,19 +1,23 @@
-import React, { FunctionComponent} from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Header, Hero, List, Footer } from './components';
 import { styled } from 'styled-components';
 import { getDisneyCharacters } from './services/Api'; 
 
 const App: FunctionComponent = () => {
-  
-  getDisneyCharacters();
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (searchTerm: string) => {
+    setSearchTerm(searchTerm);
+  };
 
   return (
     <Router>
       <Wrap>
       <Header />
       <Hero />
-      <List />
+      <List searchTerm={searchTerm} />
       <Footer />
       </Wrap>
     </Router>

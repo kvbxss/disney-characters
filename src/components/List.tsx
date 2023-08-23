@@ -12,14 +12,34 @@ import { getDisneyCharacters } from '../services/Api';
 import { FaRegStar, FaStar } from 'react-icons/fa';
 
 
+interface ITableProps {
+    searchTerm: string;
+}
 
 
-const List: FunctionComponent = () => {
+const List: FunctionComponent<ITableProps> = ({searchTerm}) => {
     const [data , setData] = useState<ICharacter[]>([])
     const [favorite, setFavorite] = useState([] as Array<number>)  
+    const [filteredData, setFilteredData] = useState<ICharacter[]>([]);
     const [displayCount, setDisplayCount] = useState(10)
     const [loadIncrement, setLoadIncrement] = useState(10)
+
     const getArray = JSON.parse(localStorage.getItem('favorite') || '0')
+
+
+    const filterData = useCallback(
+        (searchTerm: string) => {
+            if (!searchTerm) {
+                setFilteredData(data);
+                return;
+            } else {
+                const filteredData = data.filter((character) => {
+                    return character.name.toLowerCase().includes(searchTerm.toLowerCase());
+                });
+                setFilteredData(filteredData);
+            }
+        },
+         [data]);
 
     const columnHelper = createColumnHelper<ICharacter>();
 
@@ -68,9 +88,14 @@ const columns = [
         const fetchData = async () => {
         const result = await getDisneyCharacters();
         setData(result);
+        setFilteredData(result);
         };
         fetchData();
     }, []);
+
+    useEffect(() => {
+        filterData(searchTerm);
+      }, [searchTerm, filterData]);
 
 
     const handleScroll = useCallback(() => {
@@ -101,8 +126,9 @@ const columns = [
         };
     }, [handleScroll]);
 
+
     const table = useReactTable({
-        data: data,
+        data: filteredData,
         columns,
         getCoreRowModel: getCoreRowModel(),
     });
@@ -131,7 +157,7 @@ const columns = [
     
     return (
       <ListContainer>
-        <Search />
+        <Search handleSearch={filterData}/>
         <TablesContainer >
             <Characters id='tableContainer'>
                 <Title>Disney Characters</Title>

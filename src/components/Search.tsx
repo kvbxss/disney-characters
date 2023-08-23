@@ -1,7 +1,22 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { ChangeEvent, FunctionComponent, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-const Search: FunctionComponent = () => { 
+interface SearchProps {
+    handleSearch: (searchTerm: string) => void;
+  }
+
+
+
+const Search: FunctionComponent<SearchProps> = ({ handleSearch }) => {
+ 
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setSearchTerm(value);
+      handleSearch(value);
+    };
+
     return (
         <SearchContainer>
         
@@ -11,7 +26,8 @@ const Search: FunctionComponent = () => {
         <SearchText>
            <Text>List of 100 Disney Characters with own Tv Shows</Text>
            <Title>The Best Animated Disney Characters <br/> of All Time</Title>
-            <SearchBar placeholder="Search for a character..."></SearchBar>
+            <SearchBar placeholder="Search for a character..." value={searchTerm}
+          onChange={handleInputChange}></SearchBar>
         </SearchText>
     </SearchContainer>
     );
