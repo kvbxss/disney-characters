@@ -1,5 +1,5 @@
 export interface ICharacter {
-    id: string;
+    _id: number;
     films: string[];
     shortFilms: string[];
     tvShows: string[];
@@ -8,6 +8,5 @@ export interface ICharacter {
 }
 
 export interface IApi {
-    disneys: ICharacter[];
-    nextPage: string;
+    characters: ICharacter[];
 }
