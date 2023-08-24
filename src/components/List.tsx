@@ -22,32 +22,29 @@ const List: FunctionComponent<ITableProps> = ({searchTerm}) => {
     const [data , setData] = useState<ICharacter[]>([])
     const [favorite, setFavorite] = useState([] as Array<number>)  
     const [filteredData, setFilteredData] = useState<ICharacter[]>([]);
+    const [filteredFavData, setFilteredFavData] = useState([] as Array<number>) ;
 
     const getArray = JSON.parse(localStorage.getItem('favorite') || '0')
 
 
-    const filterData = useCallback(
-        (searchTerm: string) => {
-            
-            if (!searchTerm) {
-                setFilteredData(data);
-                return;
-            } else {
-                const filteredData = data.filter((character) => {
-                    return character.name.toLowerCase().includes(searchTerm.toLowerCase());
-                });
-                setFilteredData(filteredData);
-            }
-
-            
-            const filteredFavorite = favorite.filter((characterId) => {
-                const character = data.find((char) => char._id === characterId);
-                return character?.name.toLowerCase().includes(searchTerm.toLowerCase());
-            });
-            setFavorite(filteredFavorite);
-        },
-        [data, favorite]
-    );
+    const filterData = useCallback((searchTerm: string) => {
+        if (!searchTerm) {
+            setFilteredData(data);
+            setFilteredFavData(favorite); // Use favorite data when no search term
+            return;
+        }
+    
+        const filteredData = data.filter((character) => {
+            return character.name.toLowerCase().includes(searchTerm.toLowerCase());
+        });
+        setFilteredData(filteredData);
+    
+        const filteredFavorite = favorite.filter((characterId) => {
+            const character = data.find((char) => char._id === characterId);
+            return character?.name.toLowerCase().includes(searchTerm.toLowerCase());
+        });
+        setFilteredFavData(filteredFavorite);
+    }, [data, favorite]);
 
     const columnHelper = createColumnHelper<ICharacter>();
 
@@ -78,11 +75,15 @@ const columns = [
 
             const ToggleFavorite = () => {
                 if (isFavorite) {
-                    setFavorite(favorite.filter(id => id !== characterId));
+                    const updatedFavorites = favorite.filter(id => id !== characterId);
+                    setFavorite(updatedFavorites);
+                    setFilteredFavData(updatedFavorites);
                 } else {
                     setFavorite([...favorite, characterId]);
+                    setFilteredFavData([...filteredFavData, characterId]);
                 }
             }
+            
             return (
                 <>
                     {isFavorite ? <Star onClick={ToggleFavorite} /> : <EmptyStar onClick={ToggleFavorite} />}
@@ -132,7 +133,7 @@ const columns = [
                         <TableHead>Films count</TableHead>
                         <TableHead>Favorites</TableHead>
                     </Row>
-                    {favorite.map((characterId) => {
+                    {filteredFavData.map((characterId) => {
                         const character = data.find((char) => char._id === characterId);
                         return (
                             <Row key={characterId}>
