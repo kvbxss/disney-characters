@@ -27,18 +27,15 @@ const List: FunctionComponent<ITableProps> = ({searchTerm}) => {
 
 
     const filterData = useCallback(
-        (searchTerm: string) => {
-            if (!searchTerm) {
-                setFilteredData(data);
-                return;
-            } else {
-                const filteredData = data.filter((character) => {
-                    return character.name.toLowerCase().includes(searchTerm.toLowerCase());
-                });
-                setFilteredData(filteredData);
-            }
+        (searchTerm: string) => { 
+            const filteredFavorite = favorite.filter((characterId) => {
+                const character = data.find((char) => char._id === characterId);
+                return character?.name.toLowerCase().includes(searchTerm.toLowerCase());
+            });
+            setFavorite(filteredFavorite);
         },
-         [data]);
+        [data, favorite]
+    );
 
     const columnHelper = createColumnHelper<ICharacter>();
 
@@ -112,7 +109,7 @@ const columns = [
         getCoreRowModel: getCoreRowModel(),
     });
 
-  const renderFavoriteCharacters = () => {
+  const renderFavoriteCharacters = (searchTerm: string) => {
         return (
             <div>
                 <Title>My Favorites</Title>
@@ -191,7 +188,7 @@ const columns = [
                 </Table>
             </Characters>
             <Favorites>
-                {renderFavoriteCharacters()}
+                {renderFavoriteCharacters(searchTerm)}
             </Favorites>
         </TablesContainer>
       </ListContainer>
