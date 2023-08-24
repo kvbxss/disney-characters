@@ -27,7 +27,19 @@ const List: FunctionComponent<ITableProps> = ({searchTerm}) => {
 
 
     const filterData = useCallback(
-        (searchTerm: string) => { 
+        (searchTerm: string) => {
+            
+            if (!searchTerm) {
+                setFilteredData(data);
+                return;
+            } else {
+                const filteredData = data.filter((character) => {
+                    return character.name.toLowerCase().includes(searchTerm.toLowerCase());
+                });
+                setFilteredData(filteredData);
+            }
+
+            
             const filteredFavorite = favorite.filter((characterId) => {
                 const character = data.find((char) => char._id === characterId);
                 return character?.name.toLowerCase().includes(searchTerm.toLowerCase());
