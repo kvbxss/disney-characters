@@ -9,7 +9,7 @@ const Header: FunctionComponent = () => {
                 <Title to='/'>Disney</Title>
                 <Subtitle to='/favorites'>My Favorites</Subtitle>
             </TitleWrapper>
-        </Head>
+        </Head>  
     );
 }
 

@@ -10,6 +10,7 @@ import Search from './Search';
 import { ICharacter } from '../services/interface';
 import { getDisneyCharacters } from '../services/Api';
 import { FaRegStar, FaStar } from 'react-icons/fa';
+import TvShowsTooltip from './Tooltip';
 
 
 interface ITableProps {
@@ -21,8 +22,6 @@ const List: FunctionComponent<ITableProps> = ({searchTerm}) => {
     const [data , setData] = useState<ICharacter[]>([])
     const [favorite, setFavorite] = useState([] as Array<number>)  
     const [filteredData, setFilteredData] = useState<ICharacter[]>([]);
-    const [displayCount, setDisplayCount] = useState(10)
-    const [loadIncrement, setLoadIncrement] = useState(10)
 
     const getArray = JSON.parse(localStorage.getItem('favorite') || '0')
 
@@ -50,11 +49,17 @@ const columns = [
     }),
     columnHelper.accessor("name", {
         header: "Name",
+        cell: tableProps => <p>{tableProps.row.original.name} &nbsp; 
+
+        
+        {tableProps.row.original.tvShows.length > 0 && 
+        <TvShowsTooltip tvShows={tableProps.row.original.tvShows}/>}</p>,
     }),
     columnHelper.accessor("films", {
         header: "Films count",
         cell: tableProps => <p>{tableProps.row.original.films.length}</p>,
     }),
+
     columnHelper.display( {
         id: "Favorites", 
         header: "Favorites",
@@ -83,7 +88,7 @@ const columns = [
         if (getArray !== 0) {
             setFavorite([...getArray]) 
         }
-    }, [])
+    }, [getArray])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -107,7 +112,7 @@ const columns = [
         getCoreRowModel: getCoreRowModel(),
     });
 
-    const renderFavoriteCharacters = () => {
+  const renderFavoriteCharacters = () => {
         return (
             <div>
                 <Title>My Favorites</Title>
@@ -254,6 +259,8 @@ const Favorites = styled.div`
     flex-direction: column;
     word-wrap: normal;
     border-radius: 10px;
+    overflow: scroll;
+    scroll-behavior: smooth;
 `
 
 const Title = styled.h2`
@@ -273,6 +280,7 @@ const Table = styled.table`
 
 const Row = styled.tr`
     display: table-row;
+    width: 100%;
 
     `
 const TableHead = styled.th`
