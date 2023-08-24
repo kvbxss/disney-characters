@@ -29,7 +29,7 @@ const Foot = styled.section`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: #273f5c;
+    background-color: #011936;
     height: 400px;
     width: 100;
     padding: 40px;

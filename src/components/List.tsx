@@ -128,7 +128,10 @@ const columns = [
                         return (
                             <Row key={characterId}>
                                 <TableData><Image src={character?.imageUrl} alt='photo'></Image></TableData>
-                                <TableData>{character?.name}</TableData>
+                                <TableData>{character?.name} &nbsp;
+                                {character?.tvShows && character.tvShows.length > 0 &&
+                                <TvShowsTooltip tvShows={character?.tvShows}/>}
+                                </TableData>
                                 <TableData>{character?.films.length}</TableData>
                                 <TableData>
                                     <StarIcon>
@@ -216,7 +219,7 @@ const TablesContainer = styled.div`
 `
 
 const Characters = styled.div`
-    background-color: #273f5c;
+background-color: #011936;
     height: 1000px;
     width: 50%;
     margin: 10px;
@@ -249,7 +252,7 @@ const Characters = styled.div`
 `
 
 const Favorites = styled.div`
-    background-color: #273f5c;
+background-color: #011936;
     height: 1000px;
     width: 50%;
     margin: 10px;
@@ -261,6 +264,24 @@ const Favorites = styled.div`
     border-radius: 10px;
     overflow: scroll;
     scroll-behavior: smooth;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+        border-radius: 5px;
+        transition: all 0.3s ease-in-out;
+      }
+    
+      &::-webkit-scrollbar-track {
+        display: none;
+      }
+    
+      &::-webkit-scrollbar-thumb {
+        background-color: #ed254e;
+        border-radius: 5px;
+        &:hover {
+          background-color: #e3627c;
+        }
+      }
 `
 
 const Title = styled.h2`
