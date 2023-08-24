@@ -6,18 +6,12 @@ import { getDisneyCharacters } from './services/Api';
 
 const App: FunctionComponent = () => {
 
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const handleSearch = (searchTerm: string) => {
-    setSearchTerm(searchTerm);
-  };
-
   return (
     <Router>
       <Wrap>
       <Header />
       <Hero />
-      <List searchTerm={searchTerm} />
+      <List/>
       <Footer />
       </Wrap>
     </Router>

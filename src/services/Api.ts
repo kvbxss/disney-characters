@@ -6,7 +6,6 @@ export async function getDisneyCharacters() {
         if (response.ok) {
             const result = await response.json();
             const characters = result.data || [];
-            console.log(characters);
             return characters;
         }
         
