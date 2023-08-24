@@ -1,13 +1,12 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 const Header: FunctionComponent = () => {
   return (
     <Head>
       <TitleWrapper>
-        <Title to="/">Disney</Title>
-        <Subtitle to="/favorites">My Favorites</Subtitle>
+        <Title>Disney</Title>
+        <Subtitle>My Favorites</Subtitle>
       </TitleWrapper>
     </Head>
   );
@@ -28,7 +27,7 @@ const TitleWrapper = styled.div`
   flex-direction: column;
 `;
 
-const Title = styled(Link)`
+const Title = styled.h1`
   font-size: 130px;
   font-family: "Mukta", sans-serif;
   color: #ed254e;
@@ -41,7 +40,7 @@ const Title = styled(Link)`
     transition: 0.5s ease-out;
   }
 `;
-const Subtitle = styled(Link)`
+const Subtitle = styled.h1`
   font-size: 40px;
   font-family: "Mukta", sans-serif;
   color: #011936;

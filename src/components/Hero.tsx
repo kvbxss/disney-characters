@@ -27,8 +27,10 @@ const Hero: FunctionComponent = () => {
     if (isFavorite) {
       const updatedFavorites = favorite.filter((id) => id !== characterId);
       setFavorite(updatedFavorites);
+      setFilteredFavData(updatedFavorites);
     } else {
       setFavorite([...favorite, characterId]);
+      setFilteredFavData([...filteredFavData, characterId]);
     }
   };
 
