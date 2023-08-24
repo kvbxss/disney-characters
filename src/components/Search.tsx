@@ -1,29 +1,14 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-import { useFavoriteStore } from "../store/favoriteStore"; // Import your store
-import { useCharacterStore } from "../store/characterStore";
+import { useCharacterStore } from "../store/characterStore"; // Import your store
 
 const Search: FunctionComponent = () => {
-  const [searchTerm, setSearchTerm] = useState(""); // Get searchTerm from the store
-  const { favorite, setFilteredFavData } = useFavoriteStore();
-  const { data } = useCharacterStore();
+  const { searchTerm, setSearchTerm } = useCharacterStore();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-
-    setFilteredFavData(
-      data.filter((character) =>
-        character.name.toLowerCase().includes(value.toLowerCase())
-      )
-    ); // Update filteredFavData in the store
-    // Update searchTerm in the store
+    setSearchTerm(value); // Update searchTerm in the store
   };
-
-  useEffect(() => {
-    if (!favorite.length) return;
-
-    setFilteredFavData(favorite);
-  }, [favorite]);
 
   return (
     <SearchContainer>

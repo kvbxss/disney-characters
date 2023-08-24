@@ -1,4 +1,9 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, {
+  FunctionComponent,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { styled } from "styled-components";
 import {
   useReactTable,
@@ -7,31 +12,27 @@ import {
   createColumnHelper,
 } from "@tanstack/react-table";
 import Search from "./Search";
-import Favorites from "./Favorites";
 import { ICharacter } from "../services/interface";
 import { getDisneyCharacters } from "../services/Api";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import TvShowsTooltip from "./Tooltip";
 import { useCharacterStore } from "../store/characterStore";
-import { useFavoriteStore } from "../store/favoriteStore";
 
 const List: FunctionComponent = () => {
-  const { data, setData } = useCharacterStore();
+  const {
+    data,
+    favorite,
+    filteredFavData,
+    searchTerm,
+    setData,
+    setFavorite,
+    setFilteredFavData,
+    filterData,
+  } = useCharacterStore();
+
+  const getArray = JSON.parse(localStorage.getItem("favorite") || "0");
 
   const columnHelper = createColumnHelper<ICharacter>();
-
-  const { setFavorite, setFilteredFavData } = useFavoriteStore();
-  const { data: characters } = useCharacterStore();
-
-  const ToggleFavorite = (id: number) => {
-    characters.find((character) => {
-      if (character._id === id) {
-        setFavorite({ ...character, isFavorite: !character.isFavorite });
-      }
-    });
-  };
-
-  // setFilteredFavData(character);
 
   const columns = [
     columnHelper.accessor("imageUrl", {
@@ -60,22 +61,40 @@ const List: FunctionComponent = () => {
       id: "Favorites",
       header: "Favorites",
       cell: (tableProps) => {
+        const characterId = tableProps.row.original._id;
+        const isFavorite = favorite.includes(characterId);
+
+        const ToggleFavorite = () => {
+          if (isFavorite) {
+            const updatedFavorites = favorite.filter(
+              (id) => id !== characterId
+            );
+            setFavorite(updatedFavorites);
+            setFilteredFavData(updatedFavorites);
+          } else {
+            setFavorite([...favorite, characterId]);
+            setFilteredFavData([...filteredFavData, characterId]);
+          }
+        };
+
         return (
-          <StarIcon>
-            {tableProps.row.original.isFavorite ? (
-              <Star
-                onClick={() => ToggleFavorite(tableProps.row.original._id)}
-              />
+          <>
+            {isFavorite ? (
+              <Star onClick={ToggleFavorite} />
             ) : (
-              <EmptyStar
-                onClick={() => ToggleFavorite(tableProps.row.original._id)}
-              />
+              <EmptyStar onClick={ToggleFavorite} />
             )}
-          </StarIcon>
+          </>
         );
       },
     }),
   ];
+
+  useEffect(() => {
+    if (getArray !== 0) {
+      setFavorite([...getArray]);
+    }
+  }, [getArray]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,11 +104,71 @@ const List: FunctionComponent = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    filterData(searchTerm);
+  }, [searchTerm, filterData]);
+
   const table = useReactTable({
     data: data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const renderFavoriteCharacters = (searchTerm: string) => {
+    return (
+      <div>
+        <Title>My Favorites</Title>
+        <Table>
+          <Row>
+            <TableHead>Picture</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Films count</TableHead>
+            <TableHead>Favorites</TableHead>
+          </Row>
+          {filteredFavData.map((characterId) => {
+            const character = data.find((char) => char._id === characterId);
+            const isFavorite = favorite.includes(characterId);
+
+            const ToggleFavorite = () => {
+              if (isFavorite) {
+                const updatedFavorites = favorite.filter(
+                  (id) => id !== characterId
+                );
+                setFavorite(updatedFavorites);
+                setFilteredFavData(updatedFavorites);
+              } else {
+                setFavorite([...favorite, characterId]);
+                setFilteredFavData([...filteredFavData, characterId]);
+              }
+            };
+            return (
+              <Row key={characterId}>
+                <TableData>
+                  <Image src={character?.imageUrl} alt="photo"></Image>
+                </TableData>
+                <TableData>
+                  {character?.name} &nbsp;
+                  {character?.tvShows && character.tvShows.length > 0 && (
+                    <TvShowsTooltip tvShows={character?.tvShows} />
+                  )}
+                </TableData>
+                <TableData>{character?.films.length}</TableData>
+                <TableData>
+                  <StarIcon>
+                    {isFavorite ? (
+                      <Star onClick={ToggleFavorite} />
+                    ) : (
+                      <EmptyStar onClick={ToggleFavorite} />
+                    )}
+                  </StarIcon>
+                </TableData>
+              </Row>
+            );
+          })}
+        </Table>
+      </div>
+    );
+  };
 
   return (
     <ListContainer>
@@ -113,10 +192,6 @@ const List: FunctionComponent = () => {
                   ))}
                 </React.Fragment>
               ))}
-              {/* <TableHead>Picture</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Films count</TableHead>
-                        <TableHead>Favorites</TableHead> */}
             </Row>
 
             {table.getRowModel().rows.map((row) => (
@@ -135,9 +210,7 @@ const List: FunctionComponent = () => {
             ))}
           </Table>
         </Characters>
-        <FavoritesWrap>
-          <Favorites />
-        </FavoritesWrap>
+        <Favorites>{renderFavoriteCharacters(searchTerm)}</Favorites>
       </TablesContainer>
     </ListContainer>
   );
@@ -195,7 +268,7 @@ const Characters = styled.div`
   }
 `;
 
-const FavoritesWrap = styled.div`
+const Favorites = styled.div`
   background-color: #011936;
   height: 1000px;
   width: 50%;

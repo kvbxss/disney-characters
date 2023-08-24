@@ -3,24 +3,34 @@ import styled from "styled-components";
 import { getDisneyCharacters } from "../services/Api";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { useCharacterStore } from "../store/characterStore";
-import { ICharacter } from "../services/interface";
 
 const Hero: FunctionComponent = () => {
-  const { data, setData } = useCharacterStore();
+  const {
+    data,
+    favorite,
+    filteredFavData,
+    setData,
+    setFavorite,
+    setFilteredFavData,
+  } = useCharacterStore();
 
   useEffect(() => {
     const fetchData = async () => {
-      const characters = await getDisneyCharacters();
-
-      const modified = characters.map((character: ICharacter) => ({
-        ...character,
-        isFavorite: false,
-      }));
-
-      setData(modified);
+      const result = await getDisneyCharacters();
+      setData(result);
     };
     fetchData();
   }, []);
+
+  const toggleFavorite = (characterId: number) => {
+    const isFavorite = favorite.includes(characterId);
+    if (isFavorite) {
+      const updatedFavorites = favorite.filter((id) => id !== characterId);
+      setFavorite(updatedFavorites);
+    } else {
+      setFavorite([...favorite, characterId]);
+    }
+  };
 
   const charactersWithMostFilms = data
     .slice()
@@ -40,7 +50,11 @@ const Hero: FunctionComponent = () => {
               <CardTitle>
                 {character.name}
                 &nbsp;
-                <Star /> : <EmptyStar />
+                {favorite.includes(character._id) ? (
+                  <Star onClick={() => toggleFavorite(character._id)} />
+                ) : (
+                  <EmptyStar onClick={() => toggleFavorite(character._id)} />
+                )}
               </CardTitle>
 
               <CardSubtitle>
