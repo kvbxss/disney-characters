@@ -6,7 +6,6 @@ const Header: FunctionComponent = () => {
     <Head>
       <TitleWrapper>
         <Title>Disney</Title>
-        <Subtitle>My Favorites</Subtitle>
       </TitleWrapper>
     </Head>
   );
@@ -36,19 +35,6 @@ const Title = styled.h1`
 
   &:hover {
     color: #e3627c;
-    scale: 1.1;
-    transition: 0.5s ease-out;
-  }
-`;
-const Subtitle = styled.h1`
-  font-size: 40px;
-  font-family: "Mukta", sans-serif;
-  color: #011936;
-  font-weight: 500;
-  text-decoration: none;
-
-  &:hover {
-    color: #273f5c;
     scale: 1.1;
     transition: 0.5s ease-out;
   }
