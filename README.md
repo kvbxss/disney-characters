@@ -1,70 +1,78 @@
-# Getting Started with Create React App
+Certainly! Here's a sample README.md file for your Disney characters project:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+# Disney Characters App
 
-In the project directory, you can run:
+The Disney Characters App is a web application that allows users to explore a list of Disney characters, mark their favorite characters, and search for specific characters. This project demonstrates the use of React, Zustand for state management, and styled-components for styling.
 
-### `npm start`
+![Disney Characters App Screenshot](screenshot.png)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Table of Contents
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+- View a list of Disney characters with details like name, picture, films count, and favorite status.
+- Mark characters as favorites and view them in a separate "Favorites" section.
+- Search for characters by name using the search bar.
+- See a tooltip with TV shows when hovering over a character with TV shows.
+- Responsive design for various screen sizes.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation
 
-### `npm run build`
+1. Clone this repository to your local machine:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   ```shell
+   git clone https://github.com/your-username/disney-characters-app.git
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Change to the project directory:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   ```shell
+   cd disney-characters-app
+   ```
 
-### `npm run eject`
+3. Install the project dependencies using npm:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   ```shell
+   npm install
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Usage
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Start the development server:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   ```shell
+   npm start
+   ```
 
-## Learn More
+2. Open your web browser and visit [http://localhost:3000](http://localhost:3000) to use the Disney Characters App.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. Explore the list of Disney characters, mark your favorites, and use the search bar to find specific characters.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Project Structure
 
-### Code Splitting
+The project is structured as follows:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- `src/`: Contains the source code for the application.
+  - `components/`: React components used to build the app.
+  - `services/`: API service and interface definitions.
+  - `store/`: Zustand store for managing application state.
+  - `App.js`: The main entry point of the application.
+- `public/`: Static assets and HTML template.
+- `package.json`: Project dependencies and scripts.
+- `README.md`: This README file.
 
-### Analyzing the Bundle Size
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Contributions to the Disney Characters App are welcome! Feel free to open issues, fork the repository, and submit pull requests to help improve the project.
 
-### Making a Progressive Web App
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
