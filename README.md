@@ -1,6 +1,6 @@
 # Disney Characters App
 
-The Disney Characters App is a web application that allows users to explore a list of Disney characters, mark their favorite characters, and search for specific characters. This project demonstrates the use of React, Zustand for state management, and styled-components for styling.
+The Disney Characters App is a web application that allows users to explore a list of Disney characters, mark their favorite characters, and search for specific characters. This project demonstrates the use of React, TanStack React-table for creating a table, Zustand for state management, and styled-components for styling.
 
 ![Disney Characters App Screenshot](screenshot.png)
 
