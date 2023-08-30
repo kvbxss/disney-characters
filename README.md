@@ -18,7 +18,6 @@ The Disney Characters App is a web application that allows users to explore a li
 - Mark characters as favorites and view them in a separate "Favorites" section.
 - Search for characters by name using the search bar.
 - See a tooltip with TV shows when hovering over a character with TV shows.
-- Responsive design for various screen sizes.
 
 ## Installation
 
